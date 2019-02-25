@@ -49,7 +49,7 @@ func exitHook() {
 
 func main() {
 	var settingFile string
-	if len(os.Args) > 0 {
+	if len(os.Args) > 1 {
 		settingFile = os.Args[1]
 	} else {
 		settingFile = "setting.json"
