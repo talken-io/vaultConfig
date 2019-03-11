@@ -1,4 +1,4 @@
-# vaultConfig.go
+# vaultConfig
 
 
 ## usage
