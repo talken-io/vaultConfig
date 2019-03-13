@@ -16,15 +16,15 @@ import (
 
 // setting struct
 type Setting struct {
-	VaultApi string                            `json:vaultApi`
-	Secrets  map[string]map[string]interface{} `json:secrets`
-	Roles    map[string]Role                   `json:role`
+	VaultApi string                            `json:"vaultApi"`
+	Secrets  map[string]map[string]interface{} `json:"secrets"`
+	Roles    map[string]Role                   `json:"roles"`
 }
 
 type Role struct {
-	Secret   []string `json:secret`
-	Hostname string   `json:hostname`
-	Password string   `json:password`
+	Secret   []string `json:"secret"`
+	Hostname string   `json:"hostname"`
+	Password string   `json:"password"`
 }
 
 var setting Setting
@@ -160,7 +160,11 @@ func sendToVault(method string, url string, data interface{}) {
 }
 
 func makeSecret(s string, kv map[string]interface{}) {
-	sendToVault("POST", "secret/credentials/"+s, kv)
+	if kv != nil {
+		sendToVault("POST", "secret/credentials/"+s, kv)
+	} else {
+		fmt.Println("secret", s, "is null, skip")
+	}
 }
 
 func makeSecretPolicy(s string) {
