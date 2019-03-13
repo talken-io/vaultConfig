@@ -170,14 +170,14 @@ func makeSecret(s string, kv map[string]interface{}) {
 func makeSecretPolicy(s string) {
 	kv := map[string]string{"policy": "path \"secret/credentials/" + s + "\" { capabilities = [\"read\"] }"}
 
-	sendToVault("PUT", "sys/policy/"+s+"-policy", kv)
+	sendToVault("PUT", "sys/policy/secret-"+s+"-policy", kv)
 }
 
 func makeAppRole(r string, role Role) {
 	sb := strings.Builder{}
 
 	for index, v := range role.Secret {
-		sb.WriteString(v + "-policy")
+		sb.WriteString("secret-" + v + "-policy")
 		if index < len(role.Secret)-1 {
 			sb.WriteString(",")
 		}
@@ -194,7 +194,7 @@ func makeAppRole(r string, role Role) {
 
 func makeAppRolePolicy(r string) {
 	kv := map[string]string{"policy": "path \"auth/approle/role/" + r + "/role-id\" { capabilities = [\"read\"] }\npath \"auth/approle/role/" + r + "/secret-id\" { capabilities = [\"read\", \"create\", \"update\", \"delete\"] }"}
-	sendToVault("PUT", "sys/policy/"+r+"-keygen-policy", kv)
+	sendToVault("PUT", "sys/policy/approle-"+r+"-policy", kv)
 }
 
 func makeAppRoleUser(r string, role Role) {
@@ -222,7 +222,7 @@ func makeAppRoleUser(r string, role Role) {
 	kv["password"] = password
 	kv["ttl"] = "5s"
 	kv["max_ttl"] = "5s"
-	kv["policies"] = r + "-keygen-policy"
+	kv["policies"] = "approle-" + r + "-policy"
 
 	sendToVault("POST", "auth/userpass/users/"+username, kv)
 
