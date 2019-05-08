@@ -68,8 +68,7 @@ optional argument : setting file path (default : setting.json)
     "telegram_oauth" : {
       "client_id": "DATA",
       "client_secret": "DATA"
-    },
-    "signserver-keymap" : null
+    }
   },
   "roles": {
     "tkn-web": {
@@ -85,11 +84,11 @@ optional argument : setting file path (default : setting.json)
       "password": "1234"
     },
     "tkn-dex": {
-      "secret": [ "redis", "mariadb", "dexSettings", "web-jwt", "signserver-keymap" ],
+      "secret": [ "redis", "mariadb", "dexSettings", "web-jwt"],
       "password": "1234"
     },
     "tkn-anc": {
-      "secret": [ "redis", "mariadb", "signserver-keymap" ],
+      "secret": [ "redis", "mariadb"],
       "password": "1234"
     },
     "tkn-wdx": {
