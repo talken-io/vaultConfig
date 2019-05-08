@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -201,26 +200,26 @@ func makeAppRolePolicy(r string) {
 }
 
 func makeAppRoleUser(rolename string, role Role) {
-	var password string
-	if role.Password == "" {
-		pass := make([]byte, 32)
-		rand.Read(pass)
-		password = hex.EncodeToString(pass)
-	} else {
-		password = role.Password
-	}
+	//var password string
+	//if role.Password == "" {
+	//	pass := make([]byte, 32)
+	//	rand.Read(pass)
+	//	password = hex.EncodeToString(pass)
+	//} else {
+	//	password =
+	//}
 
 	h := sha256.New()
 	h.Write([]byte(rolename))
 	username := hex.EncodeToString(h.Sum(nil))
 
 	kv := make(map[string]string)
-	kv["password"] = password
+	kv["password"] = role.Password
 	kv["ttl"] = "5s"
 	kv["max_ttl"] = "5s"
 	kv["policies"] = "approle-" + rolename + "-policy"
 
 	sendToVault("POST", "auth/userpass/users/"+username, kv)
 
-	result = append(result, Result{rolename: rolename, username: username, password: password})
+	result = append(result, Result{rolename: rolename, username: username, password: role.Password})
 }
